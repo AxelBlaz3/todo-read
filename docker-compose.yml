@@ -1,0 +1,40 @@
+services:
+  todo-writer:
+    container_name: todo-write-container
+    image: todo-write
+    environment:
+      DEBUG: 1
+    working_dir: /code
+    volumes:
+      - ./app:/code/app
+    ports:
+      - 8080:8080
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+    restart: on-failure
+
+  todo-reader:
+    container_name: todo-read-container
+    image: todo-read
+    environment:
+      DEBUG: 1
+    working_dir: /code
+    volumes:
+      - ./app:/code/app
+    ports:
+      - 8081:8081
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8081 --reload"
+    restart: on-failure
+    depends_on:
+      - todo-writer
+
+  mongo:
+    container_name: mongo-container
+    image: mongo:latest
+    volumes:
+      - todo-mongo-data:/data/db
+    ports:
+      - 27017:27017
+    
+
+volumes:
+  todo-mongo-data:
