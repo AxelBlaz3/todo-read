@@ -3,6 +3,7 @@ from .pyobjectid import PyObjectId
 from bson import ObjectId
 
 class Todo(BaseModel):
+    """Todo model class."""
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     content: str = Field(min_length=1)
 
